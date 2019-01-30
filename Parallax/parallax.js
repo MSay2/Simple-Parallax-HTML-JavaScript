@@ -1,5 +1,8 @@
 
 var containerQuery = document.querySelector('.parallax-container');
+
+// Get all the elements than use the animation of Parallax
+var elements = document.querySelectorAll("[data-type=parallax]");
 /**
  * Constructor
  * 
@@ -8,11 +11,13 @@ var containerQuery = document.querySelector('.parallax-container');
  * @param  {[type]} minWidth [Minimum of width of the view]
  * @param  {[type]} animation [Activate animation Parallax]
  */
-function Parallax(imageUrl, minHeight, minWidth, animation)
+function Parallax(operator, imageUrl, minHeight, minWidth, animation)
 {
     
     /**
-     * @param  {[type]} imageUrl!="" [See if the imageUrl value is empty]
+     * See if the variable imageUrl value is empty
+     * 
+     * @param  {[type]} imageUrl [description]
      */
     if (imageUrl != "")
     {
@@ -21,7 +26,7 @@ function Parallax(imageUrl, minHeight, minWidth, animation)
          * 
          * @type {[object]} create [description]
          */
-        this.create(imageUrl, minHeight, minWidth);
+        this.create(operator, imageUrl, minHeight, minWidth);
     }
     else
     {
@@ -31,13 +36,13 @@ function Parallax(imageUrl, minHeight, minWidth, animation)
     /**
      * To see if the animation is requested
      * 
-     * @param {[type]} animation=="true" [description]
+     * @param {[type]} animation [description]
      */
     if (animation == "true")
     {
         window.addEventListener("scroll", () =>
         {
-            containerQuery.style.backgroundPositionY = -window.scrollY / 4 + "px";
+            elements[operator].style.backgroundPositionY = -window.scrollY / 4 + "px";
         });
     }
 }
@@ -64,7 +69,7 @@ Parallax.prototype =
      * @param  {[type]} minHeight [descrption]
      * @param  {[type]} minWidth [descrption]
      */
-    create: function(imageUrl, minHeight, minWidth)
+    create: function(operator, imageUrl, minHeight, minWidth)
     {
         var backgroundFixed = "background-attachment:fixed;";
         var backgroundPositionX = "background-position-x:center;";
@@ -75,60 +80,66 @@ Parallax.prototype =
 
         var defaultValues = backgroundFixed + backgroundPositionX + backgroundNoRepeat + backgroundInHerit;
 
-        containerQuery.setAttribute("style", defaultValues + minHeight + minWidth + appendsSrcFirst + imageUrl + appendsSrcLast);
+        elements[operator].setAttribute("style", defaultValues + minHeight + minWidth + appendsSrcFirst + imageUrl + appendsSrcLast);
     }
 };
 
 /**
- * See if the all attributes are existing and use accordingly
+ * Search the all elements than use the data Parallax
+ * Looping all the elements, for get each values of each element
  */
-if (containerQuery.getAttribute("data-type") == "parallax")
+
+for (var i = 0; i < elements.length; i++)
 {
-    var attributes = {};
+    if (elements[i].getAttribute("data-type") == "parallax")
+    {
+        var attributes = {};
 
-    var dataSrc = "data-src";
-    var dataMinHeight = "data-min-height";
-    var dataMinWidth = "data-min-width";
-    var dataAnimation = "data-animation";
+        var dataSrc = "data-src";
+        var dataMinHeight = "data-min-height";
+        var dataMinWidth = "data-min-width";
+        var dataAnimation = "data-animation";
 
-    if (containerQuery.getAttribute(dataSrc) != "")
-    {
-        attributes.src = containerQuery.getAttribute(dataSrc);
-    }
-    else
-    {
-        console.error("Parallax: Vous ne pouvez pas créer un parallax sans image." + "Si cette erreur persiste, il se pourrait que l’emplacement de votre image ne sois pas trouvée en raison d’un chemin d’accès erroné." + "Ou que l’attribut {@data-src} soit vide ou non inscrit dans votre fichier HTML");
-    }
+        if (elements[i].getAttribute(dataSrc) != "")
+        {
+            attributes.src = elements[i].getAttribute(dataSrc);
+        }
+        else
+        {
+            console.error("Parallax: Vous ne pouvez pas créer un parallax sans image." + "Si cette erreur persiste, il se pourrait que l’emplacement de votre image ne sois pas trouvée en raison d’un chemin d’accès erroné." + "Ou que l’attribut {@data-src} soit vide ou non inscrit dans votre fichier HTML");
+        }
 
-    if (containerQuery.getAttribute(dataMinHeight) != null)
-    {
-        attributes.minHeight = "min-height:" + containerQuery.getAttribute(dataMinHeight) + ";";
-    }
-    else
-    {
-        attributes.minHeight = "min-height:200px;";
-    }
+        if (elements[i].getAttribute(dataMinHeight) != null)
+        {
+            attributes.minHeight = "min-height:" + elements[i].getAttribute(dataMinHeight) + ";";
+        }
+        else
+        {
+            attributes.minHeight = "min-height:200px;";
+        }
 
-    if (containerQuery.getAttribute(dataMinWidth) != null)
-    {
-        attributes.minWidth = "min-width:" + containerQuery.getAttribute(dataMinWidth) + ";";
-    }
-    else
-    {
-        attributes.minWidth = "min-width:100%;";
-    }
+        if (elements[i].getAttribute(dataMinWidth) != null)
+        {
+            attributes.minWidth = "min-width:" + elements[i].getAttribute(dataMinWidth) + ";";
+        }
+        else
+        {
+            attributes.minWidth = "min-width:100%;";
+        }
 
-    if (containerQuery.getAttribute(dataAnimation) == "true")
-    {
-        attributes.animation = containerQuery.getAttribute(dataAnimation);
+        if (elements[i].getAttribute(dataAnimation) == "true")
+        {
+            attributes.animation = elements[i].getAttribute(dataAnimation);
+        }
+
+        /**
+         * Create instance
+         * 
+         * @param  {[type]} attributes.src [description]
+         * @param  {[type]} attributes.minHeight [description]
+         * @param  {[type]} attributes.minWidth [description]
+         * @param  {[type]} attributes.animation [description]
+         */
+        new Parallax(i, attributes.src, attributes.minHeight, attributes.minWidth, attributes.animation);
     }
-    /**
-     * Create instance
-     * 
-     * @param  {[type]} attributes.src [description]
-     * @param  {[type]} attributes.minHeight [description]
-     * @param  {[type]} attributes.minWidth [description]
-     * @param  {[type]} attributes.animation [description]
-     */
-    new Parallax(attributes.src, attributes.minHeight, attributes.minWidth, attributes.animation);
 }
