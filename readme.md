@@ -53,6 +53,14 @@ Insert the attribute `data-animation` in your `<div>` tag and insert the `true` 
 data-animation="true"
 ```
 
+##### This attribute is for the control of the speed of animation of the Parallax
+Insert the attribute `data-division` in your `<div>` tag and insert an value encrypted (a number).
+> 4 is a default number
+
+```
+data-division="4"
+```
+
 ### List of all attributes
 ###### The attribute `data-min-width` is obsolete for the moment
 
@@ -61,6 +69,7 @@ data-animation="true"
 * data-min-width
 * data-src
 * data-animation
+* data-division
 
 
 # License

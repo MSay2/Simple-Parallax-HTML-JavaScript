@@ -17,6 +17,5 @@ body {
     position: relative;
     cursor: default;
     margin: 0 48px 48px 48px;
-    transform: translate(0%, -40%);
     background-color: #FFFFFF;
   }

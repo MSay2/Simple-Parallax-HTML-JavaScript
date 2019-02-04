@@ -11,7 +11,7 @@ var elements = document.querySelectorAll("[data-type=parallax]");
  * @param  {[type]} minWidth [Minimum of width of the view]
  * @param  {[type]} animation [Activate animation Parallax]
  */
-function Parallax(operator, imageUrl, minHeight, minWidth, animation)
+function Parallax(operator, imageUrl, minHeight, minWidth, animation, division)
 {
     
     /**
@@ -42,7 +42,7 @@ function Parallax(operator, imageUrl, minHeight, minWidth, animation)
     {
         window.addEventListener("scroll", () =>
         {
-            elements[operator].style.backgroundPositionY = -window.scrollY / 4 + "px";
+            elements[operator].style.backgroundPositionY = -window.scrollY / division + "px";
         });
     }
 }
@@ -59,7 +59,8 @@ Parallax.prototype =
         src: "",
         minHeight: 100,
         minWidth: 100,
-        animation: false
+        animation: false,
+        division: 4
     },
     
     /**
@@ -99,6 +100,7 @@ for (var i = 0; i < elements.length; i++)
         var dataMinHeight = "data-min-height";
         var dataMinWidth = "data-min-width";
         var dataAnimation = "data-animation";
+        var dataDivision = "data-division";
 
         if (elements[i].getAttribute(dataSrc) != "")
         {
@@ -115,6 +117,7 @@ for (var i = 0; i < elements.length; i++)
         }
         else
         {
+            // Default value
             attributes.minHeight = "min-height:200px;";
         }
 
@@ -124,6 +127,7 @@ for (var i = 0; i < elements.length; i++)
         }
         else
         {
+            // Default value
             attributes.minWidth = "min-width:100%;";
         }
 
@@ -131,6 +135,18 @@ for (var i = 0; i < elements.length; i++)
         {
             attributes.animation = elements[i].getAttribute(dataAnimation);
         }
+
+        if (elements[i].getAttribute(dataDivision) != null)
+        {
+            attributes.division = elements[i].getAttribute(dataDivision);
+        }
+        else
+        {
+            // Default value
+            attributes.division = 4;
+        }
+
+        console.log(attributes.division);
 
         /**
          * Create instance
@@ -140,6 +156,6 @@ for (var i = 0; i < elements.length; i++)
          * @param  {[type]} attributes.minWidth [description]
          * @param  {[type]} attributes.animation [description]
          */
-        new Parallax(i, attributes.src, attributes.minHeight, attributes.minWidth, attributes.animation);
+        new Parallax(i, attributes.src, attributes.minHeight, attributes.minWidth, attributes.animation, attributes.division);
     }
 }
